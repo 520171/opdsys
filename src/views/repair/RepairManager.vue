@@ -45,8 +45,8 @@
       </el-pagination>
     </el-col>
 
-    <!--编辑界面-->
-    <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+    <!--详情界面-->
+    <el-dialog :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="姓名" prop="u_name">
           <el-input v-model="editForm.u_name" auto-complete="off"></el-input>
@@ -66,7 +66,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" v-if="false">
         <el-button @click.native="editFormVisible = false">取消</el-button>
         <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
       </div>

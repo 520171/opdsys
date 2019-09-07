@@ -5,6 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './routes'
 import 'font-awesome/css/font-awesome.min.css'
 import store from './vuex/store'
+import './assets/icon/iconfont.css'
 // import Router from 'vue-router'
 // import Vuex from 'vuex'
 
