@@ -46,20 +46,29 @@ export default {
         if (valid) {
           this.logining = true
           let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass }
-          requestLogin(loginParams).then(data => {
-            this.logining = false
-            console.log(data)
-            let { msg, code, user } = data
-            if (code !== 200) {
+          requestLogin(loginParams)
+            .then(data => {
+              this.logining = false
+              console.log(data)
+              let { msg, code, user } = data
+              if (code !== 200) {
+                this.$message({
+                  message: msg,
+                  type: 'error'
+                })
+              } else {
+                sessionStorage.setItem('user', JSON.stringify(user))
+                this.$router.push({ path: '/UserList' })
+              }
+            })
+            .catch(err => {
+              console.log(err)
+              this.logining = false
               this.$message({
-                message: msg,
+                message: '网络出错',
                 type: 'error'
               })
-            } else {
-              sessionStorage.setItem('user', JSON.stringify(user))
-              this.$router.push({ path: '/UserList' })
-            }
-          })
+            })
         } else {
           console.log('error submit!!')
           return false

@@ -57,10 +57,10 @@ const router = new Router({
     {
       path: '/',
       component: () => import('./views/Home.vue'),
-      name: 'Charts',
+      name: '统计',
       iconCls: 'fa fa-bar-chart',
       children: [
-        { path: '/echarts', component: () => import('./views/charts/echarts.vue'), name: 'echarts' }
+        { path: '/echarts', component: () => import('./views/charts/echarts.vue'), name: '数据分析', meta: { title: '数据分析' } }
       ]
     },
     {
