@@ -129,3 +129,11 @@ export const removeRepairs = params => {
   console.log(ret)
   return ret
 }
+
+// 获取附件信息
+export const getAnnexes = sid => {
+  console.log(sid)
+  const ret = axios.post(`/api/users/getAnnex`, { sid: sid })
+  console.log(ret)
+  return ret
+}

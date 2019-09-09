@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column prop="s_msg" label="问题描述" min-width="350" sortable :formatter="formatS_msg">
       </el-table-column>
-      <el-table-column label="操作" min-width=150>
+      <el-table-column label="操作" min-width=200>
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)" >详情</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" v-if="showHidden">删除</el-button>
@@ -46,25 +46,35 @@
     </el-col>
 
     <!--详情界面-->
-    <el-dialog :visible.sync="editFormVisible" :close-on-click-modal="false" class="detail">
+    <el-dialog :visible.sync="repairMsgVisible" :close-on-click-modal="false" class="detail">
       <div>
         <div>
           <div class='msgTitle'>报修人基本信息</div>
-          <div class="msg">姓&emsp;&emsp;名：{{ editForm.u_name }}</div>
-          <div class="msg">性&emsp;&emsp;别：{{ editForm.u_gender? '男' : '女' }}</div>
-          <div class="msg">工&emsp;&emsp;号：{{ editForm.u_jobno }}</div>
-          <div class="msg">所属部门：{{ editForm.d_name }}</div>
+          <div class="msg">姓&emsp;&emsp;名：{{ repairMsg.u_name }}</div>
+          <div class="msg">性&emsp;&emsp;别：{{ repairMsg.u_gender? '男' : '女' }}</div>
+          <div class="msg">工&emsp;&emsp;号：{{ repairMsg.u_jobno }}</div>
+          <div class="msg">所属部门：{{ repairMsg.d_name }}</div>
         </div>
         <br>
         <div>
           <div class='msgTitle'>报修内容</div>
-          <div class="msg">报修类型：{{ editForm.u_name }}</div>
-          <div class="msg">报修时间：{{ editForm.s_date }}</div>
-          <div class="msg">问题描述：{{ editForm.s_msg }}</div>
+          <div class="msg">报修类型：{{ repairMsg.s_type===1? '电脑故障' :  repairMsg.s_type===2? '打印机故障' : '其他问题' }}</div>
+          <div class="msg">报修时间：{{ repairMsg.s_date }}</div>
+          <div class="msg">问题描述：{{ repairMsg.s_msg }}</div>
         </div>
         <br>
         <div v-if="showAnnex">
           <div class='msgTitle' >附件信息</div>
+          <viewer :images="picArr">
+            <div class="annex">
+              <div class="box" :key="item" v-for="item in picArr">
+                <img :src="item" class="content" />
+              </div>
+              <div :key="item" v-for="item in videoArr" class="box">
+                <video class="content" :src="item" style="max-width: 100%; max-height: 100%;" controls="controls"/>
+              </div>
+            </div>
+          </viewer>
         </div>
       </div>
     </el-dialog>
@@ -100,7 +110,14 @@
 
 <script>
 
-import { getServiceListPage, removeRepairs, editUser, addUser } from '../../api/api'
+import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes } from '../../api/api'
+import Vue from 'vue';
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+Vue.use(Viewer)
+Viewer.setDefaults({
+  Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
+})
 
 export default {
   props: {
@@ -120,17 +137,12 @@ export default {
       listLoading: false,
       sels: [], // 列表选中列
 
-      editFormVisible: false, // 编辑界面是否显示
+      repairMsgVisible: false, // 编辑界面是否显示
       editLoading: false,
-      editFormRules: {
-        name: [
-          { required: true, message: '请输入姓名', trigger: 'blur' }
-        ]
-      },
 
-      showAnnex: true,
+      showAnnex: false,
       // 编辑界面数据
-      editForm: {
+      repairMsg: {
         u_name: '',
         u_gender: -1,
         u_jobno: '',
@@ -163,8 +175,11 @@ export default {
         sex: -1,
         jobNum: '',
         d_no: ''
-      }
-
+      },
+      picArr: [],
+      videoArr: [],
+      size: 0,
+      showViewer: false
     }
   },
   methods: {
@@ -241,9 +256,10 @@ export default {
     },
     // 显示详情界面
     handleEdit: function (index, row) {
-      this.editFormVisible = true
-      this.editForm = Object.assign({}, row)
-      // console.log(this.editForm)
+      this.repairMsgVisible = true
+      this.repairMsg = Object.assign({}, row)
+      // console.log(this.repairMsg)
+      this.obtainAnnexes(row.s_id);
     },
     // 显示新增界面
     handleAdd: function () {
@@ -257,11 +273,11 @@ export default {
     },
     // 编辑
     editSubmit () {
-      this.$refs.editForm.validate((valid) => {
+      this.$refs.repairMsg.validate((valid) => {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
-            let para = Object.assign({}, this.editForm)
+            let para = Object.assign({}, this.repairMsg)
             editUser(para)
               .then((res) => {
                 if (res.data.code === 200) {
@@ -270,8 +286,8 @@ export default {
                     message: '提交成功',
                     type: 'success'
                   })
-                  this.$refs['editForm'].resetFields()
-                  this.editFormVisible = false
+                  this.$refs['repairMsg'].resetFields()
+                  this.repairMsgVisible = false
                   this.getServices()
                 } else {
                   this.editLoading = false
@@ -371,6 +387,39 @@ export default {
             })
           })
       })
+    },
+    //获取附件
+    obtainAnnexes(sid){
+      getAnnexes(sid)
+        .then(msg => {
+          if ('fail' != msg.data.message){
+            if(0 === msg.data.message.length){
+              this.showAnnex = false
+            }else{
+              this.showAnnex = true
+              this.handleAnnex(msg.data.message)
+            }
+          }else{
+            this.showAnnex = false
+          }
+        })
+        .catch(err => {
+          console.log(`错误信息：${err}`)
+          this.showAnnex = false
+        })
+    },
+    handleAnnex(annexes){
+      this.picArr.length = 0;
+      this.videoArr.length = 0
+      for (let item of annexes){
+        if(item.a_isImg){
+          this.picArr.push(item.a_url)
+        }else{
+          this.videoArr.push(item.a_url)
+        }
+      }
+      console.log(this.picArr)
+      console.log(this.videoArr)
     }
   },
   mounted () {
@@ -394,4 +443,29 @@ export default {
     text-align: center;
     color: #797979;
   }
+
+  .detail .annex{
+    box-sizing: border-box;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    flex-wrap:wrap;
+  }
+
+  .detail .box{
+    flex: 0 0 33.3333%;
+    position: relative;
+    box-sizing: border-box;
+    padding: 5px;
+    height: 176px;
+    line-height: 176px;
+    text-align: center;
+  }
+  .detail .content{
+    max-width:100%;
+    margin-bottom: 5px;
+    max-height: 100%;
+  }
+
+
 </style>
