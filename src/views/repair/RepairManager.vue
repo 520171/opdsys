@@ -46,29 +46,26 @@
     </el-col>
 
     <!--详情界面-->
-    <el-dialog :visible.sync="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="姓名" prop="u_name">
-          <el-input v-model="editForm.u_name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="性别" prop="u_gender">
-          <el-radio-group v-model="editForm.u_gender">
-            <el-radio class="radio" :label="1">男</el-radio>
-            <el-radio class="radio" :label="0">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="工号" prop="u_jobno">
-          <el-input v-model="editForm.u_jobno" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="部门" prop="d_no">
-          <el-select v-model="editForm.d_no" placeholder="请选择" filterable clearable>
-            <el-option :key="department.d_name" v-for="department in this.$store.state.departments" :label="department.d_name" :value="department.d_no" ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer" v-if="false">
-        <el-button @click.native="editFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+    <el-dialog :visible.sync="editFormVisible" :close-on-click-modal="false" class="detail">
+      <div>
+        <div>
+          <div class='msgTitle'>报修人基本信息</div>
+          <div class="msg">姓&emsp;&emsp;名：{{ editForm.u_name }}</div>
+          <div class="msg">性&emsp;&emsp;别：{{ editForm.u_gender? '男' : '女' }}</div>
+          <div class="msg">工&emsp;&emsp;号：{{ editForm.u_jobno }}</div>
+          <div class="msg">所属部门：{{ editForm.d_name }}</div>
+        </div>
+        <br>
+        <div>
+          <div class='msgTitle'>报修内容</div>
+          <div class="msg">报修类型：{{ editForm.u_name }}</div>
+          <div class="msg">报修时间：{{ editForm.s_date }}</div>
+          <div class="msg">问题描述：{{ editForm.s_msg }}</div>
+        </div>
+        <br>
+        <div v-if="showAnnex">
+          <div class='msgTitle' >附件信息</div>
+        </div>
       </div>
     </el-dialog>
 
@@ -130,12 +127,21 @@ export default {
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ]
       },
+
+      showAnnex: true,
       // 编辑界面数据
       editForm: {
         u_name: '',
         u_gender: -1,
         u_jobno: '',
-        d_no: ''
+        u_id: '',
+        d_no: '',
+        d_name: '',
+        d_id: '',
+        s_id: '',
+        s_msg: '',
+        s_date: '',
+        s_type: ''
       },
 
       addFormVisible: false, // 新增界面是否显示
@@ -233,7 +239,7 @@ export default {
             })
         })
     },
-    // 显示编辑界面
+    // 显示详情界面
     handleEdit: function (index, row) {
       this.editFormVisible = true
       this.editForm = Object.assign({}, row)
@@ -374,6 +380,18 @@ export default {
 
 </script>
 
-<style scoped>
-
+<style>
+  .detail .el-dialog__header{
+    padding: 10px 10px;
+  }
+  .detail .el-dialog__body{
+    padding: 20px 20px;
+  }
+  .detail .msg{
+    font-size: 18px;
+  }
+  .detail .msgTitle{
+    text-align: center;
+    color: #797979;
+  }
 </style>
