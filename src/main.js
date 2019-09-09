@@ -6,6 +6,8 @@ import router from './routes'
 import 'font-awesome/css/font-awesome.min.css'
 import store from './vuex/store'
 import './assets/icon/iconfont.css'
+import Viewer from 'v-viewer'
+Vue.use(Viewer)
 // import Router from 'vue-router'
 // import Vuex from 'vuex'
 
@@ -13,6 +15,7 @@ import './assets/icon/iconfont.css'
 // Mock.bootstrap()
 Vue.use(ElementUI)
 // Vue.use(Vuex)
+
 
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {

@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column prop="s_type" label="报修类型" min-width="150" :formatter="formatType" sortable>
       </el-table-column>
-      <el-table-column prop="s_date" label="报修时间" min-width="200" sortable>
+      <el-table-column prop="s_date" label="报修时间" min-width="150" sortable>
       </el-table-column>
       <el-table-column prop="s_msg" label="问题描述" min-width="350" sortable :formatter="formatS_msg">
       </el-table-column>
@@ -51,7 +51,7 @@
         <div>
           <div class='msgTitle'>报修人基本信息</div>
           <div class="msg">姓&emsp;&emsp;名：{{ repairMsg.u_name }}</div>
-          <div class="msg">性&emsp;&emsp;别：{{ repairMsg.u_gender? '男' : '女' }}</div>
+          <div class="msg">性&emsp;&emsp;别：{{ repairMsg.u_gender ? '男' : '女' }}</div>
           <div class="msg">工&emsp;&emsp;号：{{ repairMsg.u_jobno }}</div>
           <div class="msg">所属部门：{{ repairMsg.d_name }}</div>
         </div>
@@ -65,7 +65,7 @@
         <br>
         <div v-if="showAnnex">
           <div class='msgTitle' >附件信息</div>
-          <viewer :images="picArr">
+          <vue-viewer :images="picArr">
             <div class="annex">
               <div class="box" :key="item" v-for="item in picArr">
                 <img :src="item" class="content" />
@@ -74,11 +74,10 @@
                 <video class="content" :src="item" style="max-width: 100%; max-height: 100%;" controls="controls"/>
               </div>
             </div>
-          </viewer>
+          </vue-viewer>
         </div>
       </div>
     </el-dialog>
-
     <!--新增界面-->
     <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
@@ -111,15 +110,12 @@
 <script>
 
 import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes } from '../../api/api'
-import Vue from 'vue';
 import Viewer from 'v-viewer'
-import 'viewerjs/dist/viewer.css'
-Vue.use(Viewer)
-Viewer.setDefaults({
-  Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
-})
+import VueViewer from 'vue-viewerjs'
+
 
 export default {
+  components: { VueViewer },
   props: {
     showHidden: {
       default: true,
@@ -178,8 +174,7 @@ export default {
       },
       picArr: [],
       videoArr: [],
-      size: 0,
-      showViewer: false
+      size: 0
     }
   },
   methods: {
