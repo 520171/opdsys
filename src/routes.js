@@ -24,6 +24,17 @@ const router = new Router({
     {
       path: '/',
       component: () => import('./views/Home.vue'),
+      name: '报修记录',
+      iconCls: 'el-icon-opdbaoxiujilu',
+      leaf: false,
+      children: [
+        { path: '/RepairList', component: () => import('./views/repair/RepairList.vue'), name: '报修记录列表', meta: { title: '报修记录列表' } },
+        { path: '/RepairManager', component: () => import('./views/repair/RepairManager.vue'), name: '报修记录管理', meta: { title: '报修记录管理' } }
+      ]
+    },
+    {
+      path: '/',
+      component: () => import('./views/Home.vue'),
       name: '员工',
       iconCls: 'el-icon-opdyuangong', // 图标样式class
       children: [
@@ -41,17 +52,6 @@ const router = new Router({
       children: [
         { path: '/DepartmentList', component: () => import('./views/departments/DepartmentList.vue'), name: '部门列表', meta: { title: '部门列表' } },
         { path: '/DepartmentManager', component: () => import('./views/departments/DepartmentManager.vue'), name: '部门管理', meta: { title: '部门管理' } }
-      ]
-    },
-    {
-      path: '/',
-      component: () => import('./views/Home.vue'),
-      name: '报修记录',
-      iconCls: 'el-icon-opdbaoxiujilu',
-      leaf: false,
-      children: [
-        { path: '/RepairList', component: () => import('./views/repair/RepairList.vue'), name: '报修记录列表', meta: { title: '报修记录列表' } },
-        { path: '/RepairManager', component: () => import('./views/repair/RepairManager.vue'), name: '报修记录管理', meta: { title: '报修记录管理' } }
       ]
     },
     {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 //const base = ''
-const base = 'http://www.opdgr.cn:8000'
+const base = 'http://www.opdgr.cn'
 
 ///////////////////////登陆////////////////////////////
 export const requestLogin = params => {

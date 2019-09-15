@@ -18,19 +18,21 @@
     <!--列表-->
     <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
               style="width: 100%;">
-      <el-table-column type="selection" min-width="60" v-if="showHidden">
+      <el-table-column type="selection" min-width="60" v-if="showHidden" >
       </el-table-column>
       <el-table-column type="index" min-width="100">
       </el-table-column>
-      <el-table-column prop="u_name" label="姓名" min-width="200" sortable>
+      <el-table-column prop="u_name" label="姓名" min-width="150" >
       </el-table-column>
-      <el-table-column prop="u_gender" label="性别" min-width="200" :formatter="formatSex" sortable>
+      <el-table-column prop="u_gender" label="性别" min-width="150" :formatter="formatSex" >
       </el-table-column>
-      <el-table-column prop="u_jobno" label="工号" min-width="200" sortable>
+      <el-table-column prop="u_jobno" label="工号" min-width="150" >
       </el-table-column>
-      <el-table-column prop="d_name" label="部门" min-width="200" sortable>
+      <el-table-column prop="d_name" label="部门" min-width="150" >
       </el-table-column>
-      <el-table-column label="操作" min-width="350" v-if="showHidden">
+      <el-table-column prop="u_flag" label="员工类别" min-width="150" :formatter="formatU_falg">
+      </el-table-column>
+      <el-table-column label="操作" min-width="200" v-if="showHidden">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)" >编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -66,6 +68,12 @@
             <el-option :key="department.d_name" v-for="department in this.$store.state.departments" :label="department.d_name" :value="department.d_no" ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="类别" prop="u_flag">
+          <el-radio-group v-model="editForm.u_flag">
+            <el-radio class="radio" :label="0">普通员工</el-radio>
+            <el-radio class="radio" :label="1">维修人员</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -92,6 +100,12 @@
           <el-select v-model="addForm.d_no" placeholder="请选择" filterable clearable>
             <el-option :key="department.d_name" v-for="department in this.$store.state.departments" :label="department.d_name" :value="department.d_no" ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="类别" prop="u_flag">
+          <el-radio-group v-model="addForm.u_flag">
+            <el-radio class="radio" :label="0">普通员工</el-radio>
+            <el-radio class="radio" :label="1">维修人员</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -134,9 +148,10 @@ export default {
       // 编辑界面数据
       editForm: {
         u_name: '',
-        u_gender: -1,
+        u_gender: 1,
         u_jobno: '',
-        d_no: ''
+        d_no: '',
+        u_flag: 0
       },
 
       addFormVisible: false, // 新增界面是否显示
@@ -157,14 +172,15 @@ export default {
         name: '',
         sex: -1,
         jobNum: '',
-        d_no: ''
+        d_no: '',
+        u_flag: 0
       }
 
     }
   },
   methods: {
     // 性别显示转换
-    formatSex: function (row, column) {
+    formatSex (row, column) {
       return row.u_gender === 1 ? '男' : row.u_gender === 0 ? '女' : '未知'
     },
     handleCurrentChange (val) {
@@ -239,7 +255,7 @@ export default {
       this.addFormVisible = true
       this.addForm = {
         name: '',
-        sex: -1,
+        sex: 1,
         jobNum: '',
         d_no: ''
       }
@@ -360,6 +376,9 @@ export default {
             })
           })
       })
+    },
+    formatU_falg (row, column) {
+      return row.u_flag ? '维修人员' : '普通员工'
     }
   },
   mounted () {

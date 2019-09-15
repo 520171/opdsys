@@ -19,15 +19,15 @@
       </el-table-column>
       <el-table-column type="index" min-width="100">
       </el-table-column>
-      <el-table-column prop="u_name" label="报修人姓名" min-width="150" sortable>
+      <el-table-column prop="u_name" label="报修人姓名" min-width="150" >
       </el-table-column>
-      <el-table-column prop="u_jobno" label="报修人工号" min-width="150" sortable>
+      <el-table-column prop="u_jobno" label="报修人工号" min-width="150" >
       </el-table-column>
-      <el-table-column prop="s_type" label="报修类型" min-width="150" :formatter="formatType" sortable>
+      <el-table-column prop="s_type" label="报修类型" min-width="150" :formatter="formatType" >
       </el-table-column>
-      <el-table-column prop="s_date" label="报修时间" min-width="150" sortable>
+      <el-table-column prop="s_date" label="报修时间" min-width="150" >
       </el-table-column>
-      <el-table-column prop="s_msg" label="问题描述" min-width="350" sortable :formatter="formatS_msg">
+      <el-table-column prop="s_msg" label="问题描述" min-width="350"  :formatter="formatS_msg">
       </el-table-column>
       <el-table-column label="操作" min-width=200>
         <template scope="scope">

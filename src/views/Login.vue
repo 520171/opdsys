@@ -58,7 +58,7 @@ export default {
                 })
               } else {
                 sessionStorage.setItem('user', JSON.stringify(user))
-                this.$router.push({ path: '/UserList' })
+                this.$router.push({ path: '/RepairList' })
               }
             })
             .catch(err => {
