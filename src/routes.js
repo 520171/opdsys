@@ -27,6 +27,7 @@ const router = new Router({
       name: '报修记录',
       iconCls: 'el-icon-opdbaoxiujilu',
       leaf: false,
+      redirect: '/RepairList',
       children: [
         { path: '/RepairList', component: () => import('./views/repair/RepairList.vue'), name: '报修记录列表', meta: { title: '报修记录列表' } },
         { path: '/RepairManager', component: () => import('./views/repair/RepairManager.vue'), name: '报修记录管理', meta: { title: '报修记录管理' } }
@@ -37,6 +38,7 @@ const router = new Router({
       component: () => import('./views/Home.vue'),
       name: '员工',
       iconCls: 'el-icon-opdyuangong', // 图标样式class
+      redirect: '/UserList',
       children: [
         { path: '/UserList', component: () => import('./views/users/UserList.vue'), name: '员工列表', meta: { title: '员工列表' } },
         { path: '/UserManager', component: () => import('./views/users/UserManager.vue'), name: '员工管理', meta: { title: '员工管理' } }
@@ -49,6 +51,7 @@ const router = new Router({
       component: () => import('./views/Home.vue'),
       name: '部门',
       iconCls: 'el-icon-opdbumen',
+      redirect: '/DepartmentList',
       children: [
         { path: '/DepartmentList', component: () => import('./views/departments/DepartmentList.vue'), name: '部门列表', meta: { title: '部门列表' } },
         { path: '/DepartmentManager', component: () => import('./views/departments/DepartmentManager.vue'), name: '部门管理', meta: { title: '部门管理' } }
@@ -59,6 +62,7 @@ const router = new Router({
       component: () => import('./views/Home.vue'),
       name: '统计',
       iconCls: 'fa fa-bar-chart',
+      redirect: '/echarts',
       children: [
         { path: '/echarts', component: () => import('./views/charts/echarts.vue'), name: '数据分析', meta: { title: '数据分析' } }
       ]

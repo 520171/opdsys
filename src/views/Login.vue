@@ -18,6 +18,7 @@
 
 <script>
 import { requestLogin } from '../api/api'
+const crypto = require('crypto')
 export default {
   data () {
     return {
@@ -45,7 +46,7 @@ export default {
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
           this.logining = true
-          let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass }
+          let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass, remeber: this.checked }
           requestLogin(loginParams)
             .then(data => {
               this.logining = false
@@ -57,7 +58,6 @@ export default {
                   type: 'error'
                 })
               } else {
-                sessionStorage.setItem('user', JSON.stringify(user))
                 this.$router.push({ path: '/RepairList' })
               }
             })
@@ -74,6 +74,23 @@ export default {
           return false
         }
       })
+    },
+    decrypt(data) {
+      // 解密数据  解密方式要和加密时使用的一致
+      const decipher = crypto.createDecipher('aes-256-cfb', 'opd')
+      let decrypted = decipher.update(data, 'hex', 'utf8')
+      decrypted += decipher.final('utf8')
+      return decrypted
+    }
+  },
+  mounted () {
+    if(this.$cookies.isKey('user')) {
+      this.checked = true
+      const {account, password} = JSON.parse(this.decrypt(this.$cookies.get('user')))
+      this.ruleForm2.account = account
+      this.ruleForm2.checkPass = password
+    }else{
+      this.checked = false
     }
   }
 }

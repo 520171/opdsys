@@ -7,6 +7,9 @@ import 'font-awesome/css/font-awesome.min.css'
 import store from './vuex/store'
 import './assets/icon/iconfont.css'
 import Viewer from 'v-viewer'
+import {requestAutoLogin} from './api/api'
+import VueCookies from 'vue-cookies'
+
 Vue.use(Viewer)
 // import Router from 'vue-router'
 // import Vuex from 'vuex'
@@ -16,16 +19,31 @@ Vue.use(Viewer)
 Vue.use(ElementUI)
 // Vue.use(Vuex)
 
+Vue.use(VueCookies)
 
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
-    sessionStorage.removeItem('user')
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'))
-  if (!user && to.path !== '/login') {
-    next({ path: '/login' })
-  } else {
     next()
+  } else if (to.path === '/404'){
+    next()
+  } else {
+    if(sessionStorage.getItem('user')){
+      next()
+    }else{
+      requestAutoLogin()
+        .then(msg => {
+          if(200 == msg.code){
+            sessionStorage.setItem('user', JSON.stringify(msg))
+            next()
+          } else {
+            next({ path: '/login' })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          next({ path: '/login' })
+        })
+    }
   }
 })
 const v = new Vue({

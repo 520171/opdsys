@@ -9,11 +9,13 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "crypto": "^1.0.1",
     "echarts": "^4.1.0",
     "element-ui": "^2.12.0",
     "font-awesome": "^4.7.0",
     "v-viewer": "^1.4.2",
     "vue": "^2.6.6",
+    "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.1",
     "vue-viewerjs": "^1.0.6",
     "vuex": "^3.0.1"
