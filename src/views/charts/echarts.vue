@@ -1,27 +1,28 @@
 <template>
-    <section class="chart-container">
-        <el-row>
-            <el-col :span="12">
-                <div id="chartColumn" style="width:100%; height:400px;"></div>
-            </el-col>
-            <el-col :span="12">
-                <div id="chartBar" style="width:100%; height:400px;"></div>
-            </el-col>
-            <el-col :span="12">
-                <div id="chartLine" style="width:100%; height:400px;"></div>
-            </el-col>
-            <el-col :span="12">
-                <div id="chartPie" style="width:100%; height:400px;"></div>
-            </el-col>
-            <el-col :span="24">
-                <a href="http://echarts.baidu.com/examples.html" target="_blank" style="float: right;">more>></a>
-            </el-col>
-        </el-row>
-    </section>
+  <section class="chart-container">
+      <el-row>
+          <el-col :span="12">
+              <div id="chartColumn" style="width:100%; height:400px;"></div>
+          </el-col>
+          <el-col :span="12">
+              <div id="chartBar" style="width:100%; height:400px;"></div>
+          </el-col>
+          <el-col :span="12">
+              <div id="chartLine" style="width:100%; height:400px;"></div>
+          </el-col>
+          <el-col :span="12">
+              <div id="chartPie" style="width:100%; height:400px;"></div>
+          </el-col>
+          <el-col :span="24">
+              <a href="http://echarts.baidu.com/examples.html" target="_blank" style="float: right;">more>></a>
+          </el-col>
+      </el-row>
+  </section>
 </template>
 
 <script>
 import echarts from 'echarts'
+import { showStatistics } from '../../api/api'
 
 export default {
   data () {
@@ -29,24 +30,48 @@ export default {
       chartColumn: null,
       chartBar: null,
       chartLine: null,
-      chartPie: null
+      chartPie: null,
+      drawPieChartData2: [],
+      chartColumnData: [], // 各故障类型报修人次
+      columnChartXAxis: [],
+
+      barChartYAxis: [], // 部门列表
+      barChartColumnData: [], // 各部门报修人次,
+      drawPieChartData: []
+
     }
   },
-
+  // computed: {
+  //     drawPieChartData () {
+  //       const activeSubjectsArr = []
+  //       for (let i = 0; i < this.barChartYAxis.length; i++) {
+  //         console.log(i);
+  //         let activeSubjectsObject = {};
+  //         for (let j = 0; j < this.barChartColumnData.length; j++) {
+  //           if (i == j) {
+  //             activeSubjectsObject.name = this.barChartYAxis[i]
+  //             activeSubjectsObject.value = this.barChartColumnData[j]
+  //             activeSubjectsArr.push(activeSubjectsObject);
+  //           }
+  //         }
+  //       }
+  //       return activeSubjectsArr
+  //   }
+  // },
   methods: {
     drawColumnChart () {
       this.chartColumn = echarts.init(document.getElementById('chartColumn'))
       this.chartColumn.setOption({
-        title: { text: 'Column Chart' },
+        title: { text: '报修类型' },
         tooltip: {},
         xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+          data: this.columnChartXAxis
         },
         yAxis: {},
         series: [{
-          name: '销量',
+          name: '报修人次',
           type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
+          data: this.chartColumnData
         }]
       })
     },
@@ -54,17 +79,13 @@ export default {
       this.chartBar = echarts.init(document.getElementById('chartBar'))
       this.chartBar.setOption({
         title: {
-          text: 'Bar Chart',
-          subtext: '数据来自网络'
+          text: '部门',
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
           }
-        },
-        legend: {
-          data: ['2011年', '2012年']
         },
         grid: {
           left: '3%',
@@ -78,76 +99,22 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
+          data: this.barChartYAxis
         },
         series: [
           {
-            name: '2011年',
+            name: '报修人次',
             type: 'bar',
-            data: [18203, 23489, 29034, 104970, 131744, 630230]
-          },
-          {
-            name: '2012年',
-            type: 'bar',
-            data: [19325, 23438, 31000, 121594, 134141, 681807]
+            data: this.barChartColumnData
           }
         ]
       })
     },
     drawLineChart () {
-      this.chartLine = echarts.init(document.getElementById('chartLine'))
-      this.chartLine.setOption({
-        title: {
-          text: 'Line Chart'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['邮件营销', '联盟广告', '搜索引擎']
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            name: '邮件营销',
-            type: 'line',
-            stack: '总量',
-            data: [120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-            name: '联盟广告',
-            type: 'line',
-            stack: '总量',
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: '搜索引擎',
-            type: 'line',
-            stack: '总量',
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
-          }
-        ]
-      })
-    },
-    drawPieChart () {
-      this.chartPie = echarts.init(document.getElementById('chartPie'))
+      this.chartPie = echarts.init(document.getElementById('chartLine'))
       this.chartPie.setOption({
         title: {
-          text: 'Pie Chart',
-          subtext: '纯属虚构',
+          text: '各报修类型报修人次占比',
           x: 'center'
         },
         tooltip: {
@@ -157,7 +124,7 @@ export default {
         legend: {
           orient: 'vertical',
           left: 'left',
-          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          data: this.ColumnChartXAxis
         },
         series: [
           {
@@ -165,13 +132,41 @@ export default {
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],
-            data: [
-              { value: 335, name: '直接访问' },
-              { value: 310, name: '邮件营销' },
-              { value: 234, name: '联盟广告' },
-              { value: 135, name: '视频广告' },
-              { value: 1548, name: '搜索引擎' }
-            ],
+            data: this.drawPieChartData2,
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      })
+    },
+    drawPieChart () {
+      this.chartPie = echarts.init(document.getElementById('chartPie'))
+      this.chartPie.setOption({
+        title: {
+          text: '各部门报修人次占比',
+          x: 'center'
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: this.barChartYAxis
+        },
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: this.drawPieChartData,
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,
@@ -192,7 +187,36 @@ export default {
   },
 
   mounted: function () {
-    this.drawCharts()
+    showStatistics()
+      .then(data => {
+        if(200 == data.data.code){
+          console.log(data.data.msg)
+          this.drawPieChartData = data.data.msg
+          this.barChartYAxis.length = 0
+          this.barChartColumnData.length = 0
+
+          this.drawPieChartData2.length = 0
+          this.columnChartXAxis.length = 0
+          this.chartColumnData.length = 0
+
+          this.drawPieChartData.forEach(value => {
+            this.barChartYAxis.push(value.name)
+            this.barChartColumnData.push(value.value)
+          })
+          console.log(data.data.msg2)
+
+          data.data.msg2.forEach((value, index) => {
+            this.chartColumnData.push(value.num)
+            this.columnChartXAxis.push(value.type === 1 ? '电脑故障' : value.type === 2 ? '打印机故障' : '其他问题')
+            this.drawPieChartData2.push({ name: this.columnChartXAxis[index], value: value.num })
+          })
+          this.drawCharts()
+        }
+
+      })
+      .catch(err => err.console.log(err))
+
+
   },
   updated: function () {
     this.drawCharts()
