@@ -1,0 +1,65 @@
+{
+  "id": "1395427",
+  "name": "eleOpd",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-opd",
+  "description": "报修项目所需的图标",
+  "glyphs": [
+    {
+      "icon_id": "687786",
+      "name": "员工",
+      "font_class": "yuangong",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "5976067",
+      "name": "部门",
+      "font_class": "bumen",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "9047032",
+      "name": "二维码",
+      "font_class": "ico",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "10163984",
+      "name": "报修记录",
+      "font_class": "baoxiujilu",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "10778749",
+      "name": "员工",
+      "font_class": "yuangong-after",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "10778751",
+      "name": "部门",
+      "font_class": "bumen-after",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "10778752",
+      "name": "报修记录",
+      "font_class": "baoxiujilu-after",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "11058729",
+      "name": "二维码",
+      "font_class": "ico-copy",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    }
+  ]
+}
