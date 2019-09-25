@@ -32,6 +32,11 @@
       </el-table-column>
       <el-table-column prop="u_flag" label="员工类别" min-width="150" :formatter="formatU_falg">
       </el-table-column>
+      <el-table-column label="QRCode" min-width="150">
+        <template scope="scope">
+          <el-button size="small" @click="showQRCode(scope.$index, scope.row)" icon="el-icon-opdico"></el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" min-width="200" v-if="showHidden">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)" >编辑</el-button>
@@ -113,14 +118,21 @@
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="QRCodeTitle" :visible.sync="QRCodeVisible" :close-on-click-modal="false" >
+      <VueViewer :images="imgSrc" style="text-align: center">
+        <img :src="imgSrc" />
+      </VueViewer>
+    </el-dialog>
   </section>
 </template>
 
 <script>
 
-import { getUserListPage, removeUsers, editUser, addUser } from '../../api/api'
+import { getUserListPage, removeUsers, editUser, addUser, showQRCode } from '../../api/api'
+import VueViewer from 'vue-viewerjs'
 
 export default {
+  components: { VueViewer },
   props: {
     showHidden: {
       default: true,
@@ -174,8 +186,10 @@ export default {
         jobNum: '',
         d_no: '',
         u_flag: 0
-      }
-
+      },
+      imgSrc: '',
+      QRCodeVisible: false,
+      QRCodeTitle: ''
     }
   },
   methods: {
@@ -257,7 +271,8 @@ export default {
         name: '',
         sex: 1,
         jobNum: '',
-        d_no: ''
+        d_no: '',
+        u_flag: 0
       }
     },
     // 编辑
@@ -379,6 +394,20 @@ export default {
     },
     formatU_falg (row, column) {
       return row.u_flag ? '维修人员' : '普通员工'
+    },
+    showQRCode (index, row) {
+      showQRCode({ name: row.u_name, jobNo: row.u_jobno})
+        .then(result => {
+          this.imgSrc = result.data.imgDir
+          this.QRCodeVisible = true
+          this.QRCodeTitle = `${ row.u_name }的个人报修码`
+        })
+        .catch(err => {
+          this.imgSrc = ''
+          this.QRCodeVisible = false
+          this.QRCodeTitle = `${ row.u_name }的个人报修码`
+        })
+
     }
   },
   mounted () {

@@ -110,7 +110,6 @@
 <script>
 
 import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes } from '../../api/api'
-import Viewer from 'v-viewer'
 import VueViewer from 'vue-viewerjs'
 
 
@@ -254,7 +253,8 @@ export default {
       this.repairMsgVisible = true
       this.repairMsg = Object.assign({}, row)
       // console.log(this.repairMsg)
-      this.obtainAnnexes(row.s_id);
+      this.obtainAnnexes(row.s_id)
+
     },
     // 显示新增界面
     handleAdd: function () {
