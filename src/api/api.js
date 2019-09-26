@@ -205,7 +205,7 @@ export const showStatistics = () =>{
   console.log(ret)
   return ret
 }
-获取报修码
+// 获取报修码
 export const showQRCode = params => {
   const ret = instance.post(`${base}/showQRCode`, { params: params })
   return ret
