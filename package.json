@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chinese2pinyin": "^1.0.1",
     "crypto": "^1.0.1",
     "echarts": "^4.1.0",
     "element-ui": "^2.12.0",

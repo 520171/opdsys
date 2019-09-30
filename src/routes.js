@@ -8,7 +8,7 @@ const router = new Router({
   routes: [
     {
       path: '/login',
-      component: () => import('./views/Login.vue'),
+      component: resolve => require(['./views/Login.vue'], resolve),
       name: '',
       hidden: true,
       meta: {
@@ -17,20 +17,20 @@ const router = new Router({
     },
     {
       path: '/404',
-      component: () => import('./views/404.vue'),
+      component: resolve => require(['./views/404.vue'], resolve),
       name: '',
       hidden: true
     },
     {
       path: '/',
-      component: () => import('./views/Home.vue'),
+      component: resolve => require(['./views/Home.vue'], resolve),
       name: '报修记录',
       iconCls: 'el-icon-opdbaoxiujilu',
       leaf: false,
       redirect: '/RepairList',
       children: [
-        { path: '/RepairList', component: () => import('./views/repair/RepairList.vue'), name: '报修记录列表', meta: { title: '报修记录列表' } },
-        { path: '/RepairManager', component: () => import('./views/repair/RepairManager.vue'), name: '报修记录管理', meta: { title: '报修记录管理' } }
+        { path: '/RepairList', component: resolve => require(['./views/repair/RepairList.vue'], resolve), name: '报修记录列表', meta: { title: '报修记录列表' } },
+        { path: '/RepairManager', component: resolve => require(['./views/repair/RepairManager.vue'], resolve), name: '报修记录管理', meta: { title: '报修记录管理' } }
       ]
     },
     {
@@ -40,8 +40,8 @@ const router = new Router({
       iconCls: 'el-icon-opdyuangong', // 图标样式class
       redirect: '/UserList',
       children: [
-        { path: '/UserList', component: () => import('./views/users/UserList.vue'), name: '员工列表', meta: { title: '员工列表' } },
-        { path: '/UserManager', component: () => import('./views/users/UserManager.vue'), name: '员工管理', meta: { title: '员工管理' } }
+        { path: '/UserList', component: resolve => require(['./views/users/UserList.vue'], resolve), name: '员工列表', meta: { title: '员工列表' } },
+        { path: '/UserManager', component: resolve => require(['./views/users/UserManager.vue'], resolve), name: '员工管理', meta: { title: '员工管理' } }
         // { path: '/form', component: () => import('./views/users/Form.vue'), name: 'Form', hidden: true },
         // { path: '/main', component: () => import('./views/Main.vue'), name: '主页', hidden: true }
       ]
@@ -53,8 +53,8 @@ const router = new Router({
       iconCls: 'el-icon-opdbumen',
       redirect: '/DepartmentList',
       children: [
-        { path: '/DepartmentList', component: () => import('./views/departments/DepartmentList.vue'), name: '部门列表', meta: { title: '部门列表' } },
-        { path: '/DepartmentManager', component: () => import('./views/departments/DepartmentManager.vue'), name: '部门管理', meta: { title: '部门管理' } }
+        { path: '/DepartmentList', component: resolve => require(['./views/departments/DepartmentList.vue'], resolve), name: '部门列表', meta: { title: '部门列表' } },
+        { path: '/DepartmentManager', component: resolve => require(['./views/departments/DepartmentManager.vue'], resolve), name: '部门管理', meta: { title: '部门管理' } }
       ]
     },
     {
@@ -64,7 +64,7 @@ const router = new Router({
       iconCls: 'fa fa-bar-chart',
       redirect: '/echarts',
       children: [
-        { path: '/echarts', component: () => import('./views/charts/echarts.vue'), name: '数据分析', meta: { title: '数据分析' } }
+        { path: '/echarts', component: resolve => require(['./views/charts/echarts.vue'], resolve), name: '数据分析', meta: { title: '数据分析' } }
       ]
     },
     {

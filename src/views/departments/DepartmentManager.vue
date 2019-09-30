@@ -44,7 +44,7 @@
 
     <!--编辑界面-->
     <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+      <el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
         <el-form-item label="部门编号" prop="d_no">
           <el-input v-model="editForm.d_no" auto-complete="off"></el-input>
         </el-form-item>
@@ -60,11 +60,11 @@
 
     <!--新增界面-->
     <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
-      <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+      <el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
         <el-form-item label="部门编号" prop="d_no">
           <el-input v-model="addForm.d_no" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="部门名称" prop="d_name">
+        <el-form-item label="部门名称" prop="d_name" >
           <el-input v-model="addForm.d_name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>

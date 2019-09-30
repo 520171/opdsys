@@ -24,6 +24,8 @@
       </el-table-column>
       <el-table-column prop="u_name" label="姓名" min-width="150" >
       </el-table-column>
+      <el-table-column prop="u_userid" label="userid" min-width="150" >
+      </el-table-column>
       <el-table-column prop="u_gender" label="性别" min-width="150" :formatter="formatSex" >
       </el-table-column>
       <el-table-column prop="u_jobno" label="工号" min-width="150" >
@@ -57,7 +59,11 @@
     <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="姓名" prop="u_name">
-          <el-input v-model="editForm.u_name" auto-complete="off"></el-input>
+          <el-input v-model="editForm.u_name" auto-complete="off" @focus="editForm.u_userid = getUserid(editForm.u_name)"
+                    @blur="editForm.u_userid = getUserid(editForm.u_name)"></el-input>
+        </el-form-item>
+        <el-form-item label="userid" prop="u_userid">
+          <el-input v-model="editForm.u_userid" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="u_gender">
           <el-radio-group v-model="editForm.u_gender">
@@ -89,8 +95,12 @@
     <!--新增界面-->
     <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="addForm.name" auto-complete="off"></el-input>
+        <el-form-item label="姓名" prop="name" >
+          <el-input v-model="addForm.name" auto-complete="off" @focus="addForm.u_userid = getUserid(addForm.name)"
+                    @blur="addForm.u_userid = getUserid(addForm.name)" ></el-input>
+        </el-form-item>
+        <el-form-item label="userid" prop="u_userid">
+          <el-input v-model="addForm.u_userid" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="addForm.sex">
@@ -130,6 +140,7 @@
 
 import { getUserListPage, removeUsers, editUser, addUser, showQRCode } from '../../api/api'
 import VueViewer from 'vue-viewerjs'
+const convert = require('chinese2pinyin')
 
 export default {
   components: { VueViewer },
@@ -153,13 +164,23 @@ export default {
       editFormVisible: false, // 编辑界面是否显示
       editLoading: false,
       editFormRules: {
-        name: [
+        u_name: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
+        ],
+        u_jobno: [
+          { required: true, message: '工号不能为空', trigger: 'blur' }
+        ],
+        d_no: [
+          { required: true, message: '部门不能为空', trigger: 'blur' }
+        ],
+        u_userid: [
+          { required: true, message: 'userid不能为空', trigger: 'blur' }
         ]
       },
       // 编辑界面数据
       editForm: {
         u_name: '',
+        u_userid: '',
         u_gender: 1,
         u_jobno: '',
         d_no: '',
@@ -177,11 +198,15 @@ export default {
         ],
         d_no: [
           { required: true, message: '部门不能为空', trigger: 'blur' }
+        ],
+        u_userid: [
+          { required: true, message: 'userid不能为空', trigger: 'blur' }
         ]
       },
       // 新增界面数据
       addForm: {
         name: '',
+        u_userid: '',
         sex: -1,
         jobNum: '',
         d_no: '',
@@ -272,7 +297,8 @@ export default {
         sex: 1,
         jobNum: '',
         d_no: '',
-        u_flag: 0
+        u_flag: 0,
+        u_userid: ''
       }
     },
     // 编辑
@@ -408,6 +434,12 @@ export default {
           this.QRCodeTitle = `${ row.u_name }的个人报修码`
         })
 
+    },
+    getUserid (username) {
+      return convert({
+        cn: username,
+        result: 'P'
+      })
     }
   },
   mounted () {
