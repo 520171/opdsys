@@ -9,6 +9,9 @@
         <el-form-item>
           <el-button type="primary" v-on:click="getServices">查询</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="exportExcel">导出</el-button>
+        </el-form-item>
       </el-form>
     </el-col>
 
@@ -104,13 +107,27 @@
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
       </div>
     </el-dialog>
+    <!-- 导出报表界面-->
+    <el-dialog title="导出execel" :visible.sync="showExportExcel" :close-on-click-modal="false" style="text-align: center;">
+      <el-date-picker
+        v-model="rangeDate"
+        prefix-icon="el-icon-date"
+        type="daterange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        size="small"
+        value-format="yyyy/MM/dd"
+        style="margin: 20px"
+      ></el-date-picker>
+      <el-button type="primary" @click="confirmExportExcel">确认</el-button>
+    </el-dialog>
   </section>
 </template>
-
 <script>
 
-import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes } from '../../api/api'
+import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes, showExcelData } from '../../api/api'
 import VueViewer from 'vue-viewerjs'
+import { export2Excel } from '../../utils/util'
 
 
 export default {
@@ -173,7 +190,18 @@ export default {
       },
       picArr: [],
       videoArr: [],
-      size: 0
+      size: 0,
+      showExportExcel: false,
+      rangeDate: [],
+      excelFormateData: [
+        {title: '报修人姓名', key: 'u_name'},
+        {title: '报修人工号', key: 'u_jobno'},
+        {title: '报修人所属部门', key: 'd_name'},
+        {title: '报修类型', key: 't_name'},
+        {title: '报修时间', key: 's_date'},
+        {title: '问题描述', key: 's_msg'}
+      ],
+      tableParams: {}
     }
   },
   methods: {
@@ -413,8 +441,40 @@ export default {
           this.videoArr.push(item.a_url)
         }
       }
-      console.log(this.picArr)
-      console.log(this.videoArr)
+      // console.log(this.picArr)
+      // console.log(this.videoArr)
+    },
+    exportExcel () {
+      // console.log(this.repairs)
+      // export2Excel(this.excelFormateData, this.repairs)
+      this.showExportExcel = true
+      this.rangeDate = null
+    },
+    confirmExportExcel () {
+      const beginDate = this.rangeDate[0]
+      const endDate = this.rangeDate[1]
+      showExcelData({ beginDate, endDate })
+        .then(res => {
+          if(200 == res.data.code){
+            export2Excel(this.excelFormateData, res.data.msg)
+            this.showExportExcel = false
+          }
+
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  },
+  watch: {
+    rangeDate: function (newVal, oldVal) {
+      if (newVal !== null) {
+        this.tableParams.beginDate = newVal[0]
+        this.tableParams.endDate = newVal[1]
+      } else {
+        this.tableParams.beginDate = null
+        this.tableParams.endDate = null
+      }
     }
   },
   mounted () {

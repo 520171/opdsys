@@ -13,13 +13,15 @@
     "crypto": "^1.0.1",
     "echarts": "^4.1.0",
     "element-ui": "^2.12.0",
+    "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "v-viewer": "^1.4.2",
     "vue": "^2.6.6",
     "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.1",
     "vue-viewerjs": "^1.0.6",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "xlsx": "^0.15.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
@@ -34,6 +36,7 @@
     "mockjs": "^1.0.1-beta3",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
+    "script-loader": "^0.7.2",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.5.21"
   },
