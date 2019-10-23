@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import cpn from './RepairManager'
+const cpn = () => import('./RepairManager')
 export default {
   name: 'RepairList',
   components: {

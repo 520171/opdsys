@@ -7,21 +7,19 @@ Vue.use(Vuex)
 
 // 应用初始状态
 const state = {
-  count: 10,
-  name: 'zjj',
-  departments: []
+  Authorization: localStorage.getItem('Authorization') || '',
+  user: localStorage.getItem('user') || ''
 }
 
 // 定义所需的 mutations
 const mutations = {
-  INCREMENT (state) {
-    state.count++
+  setAuthorization (state, payload) {
+    state.Authorization = payload.Authorization
+    localStorage.setItem('Authorization', payload.Authorization)
   },
-  DECREMENT (state) {
-    state.count--
-  },
-  storeDepartments (state, departments) {
-    state.departments = departments
+  setUser (state, payload) {
+    state.user = payload.user
+    localStorage.setItem('user', payload.user)
   }
 }
 
@@ -32,3 +30,5 @@ export default new Vuex.Store({
   state,
   mutations
 })
+
+

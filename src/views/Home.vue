@@ -9,15 +9,16 @@
           <i class="fa fa-align-justify"></i>
         </div>
       </el-col>
-      <el-col :span="4" class="userinfo" v-if="showUserInfo">
-        <el-dropdown trigger="hover">
-          <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar"/> {{sysUserName}}</span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>我的消息</el-dropdown-item>
-            <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+      <el-col :span="4" class="userinfo" >
+<!--        <el-dropdown trigger="hover">-->
+<!--          <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar"/> {{sysUserName}}</span>-->
+<!--          <el-dropdown-menu slot="dropdown">-->
+<!--            <el-dropdown-item>我的消息</el-dropdown-item>-->
+<!--            <el-dropdown-item>设置</el-dropdown-item>-->
+<!--            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
+<!--          </el-dropdown-menu>-->
+<!--        </el-dropdown>-->
+        <el-button @click="logout">退出登录</el-button>
       </el-col>
     </el-col>
     <el-col :span="24" class="main">
@@ -137,7 +138,7 @@ export default {
       this.$confirm('确认退出吗?', '提示', {
         // type: 'warning'
       }).then(() => {
-        sessionStorage.removeItem('user')
+        localStorage.removeItem('Authorization')
         _this.$router.push('/login')
       }).catch(() => {
 
@@ -149,14 +150,6 @@ export default {
     },
     showMenu (i, status) {
       this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none'
-    }
-  },
-  mounted () {
-    var user = sessionStorage.getItem('user')
-    if (user) {
-      user = JSON.parse(user)
-      this.sysUserName = user.name || ''
-      this.sysUserAvatar = user.avatar || ''
     }
   }
 }

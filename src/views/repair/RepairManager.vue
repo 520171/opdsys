@@ -7,7 +7,21 @@
           <el-input v-model="filters.name" placeholder="报修人姓名"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getServices">查询</el-button>
+          <el-date-picker
+            v-model="rangeDate"
+            prefix-icon="el-icon-date"
+            type="daterange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            size="small"
+            value-format="yyyy/MM/dd"
+            unlink-panels
+            @change="dateChange"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" v-on:click="checkServices">查询</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出</el-button>
@@ -22,15 +36,15 @@
       </el-table-column>
       <el-table-column type="index" min-width="100">
       </el-table-column>
-      <el-table-column prop="u_name" label="报修人姓名" min-width="150" >
+      <el-table-column prop="u_name" label="报修人姓名" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="u_jobno" label="报修人工号" min-width="150" >
+      <el-table-column prop="u_jobno" label="报修人工号" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="s_type" label="报修类型" min-width="150" :formatter="formatType" >
+      <el-table-column prop="s_type" label="报修类型" min-width="150" :formatter="formatType" sortable>
       </el-table-column>
-      <el-table-column prop="s_date" label="报修时间" min-width="150" >
+      <el-table-column prop="s_date" label="报修时间" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="s_msg" label="问题描述" min-width="350"  :formatter="formatS_msg">
+      <el-table-column prop="s_msg" label="问题描述" min-width="350"  :formatter="formatS_msg" sortable>
       </el-table-column>
       <el-table-column label="操作" min-width=200>
         <template scope="scope">
@@ -51,23 +65,23 @@
     <!--详情界面-->
     <el-dialog :visible.sync="repairMsgVisible" :close-on-click-modal="false" class="detail">
       <div>
-        <div>
+        <div class="userInfo">
           <div class='msgTitle'>报修人基本信息</div>
+          <div class="msg">工&emsp;&emsp;号：{{ repairMsg.u_jobno }}</div>
           <div class="msg">姓&emsp;&emsp;名：{{ repairMsg.u_name }}</div>
           <div class="msg">性&emsp;&emsp;别：{{ repairMsg.u_gender ? '男' : '女' }}</div>
-          <div class="msg">工&emsp;&emsp;号：{{ repairMsg.u_jobno }}</div>
           <div class="msg">所属部门：{{ repairMsg.d_name }}</div>
         </div>
         <br>
-        <div>
+        <div class="repairInfo">
           <div class='msgTitle'>报修内容</div>
           <div class="msg">报修类型：{{ repairMsg.s_type===1? '电脑故障' :  repairMsg.s_type===2? '打印机故障' : '其他问题' }}</div>
           <div class="msg">报修时间：{{ repairMsg.s_date }}</div>
           <div class="msg">问题描述：{{ repairMsg.s_msg }}</div>
         </div>
         <br>
-        <div v-if="showAnnex">
-          <div class='msgTitle' >附件信息</div>
+        <div v-if="showAnnex" class="annexInfo">
+          <div class='msgTitle'>附件信息</div>
           <vue-viewer :images="picArr">
             <div class="annex">
               <div class="box" :key="item" v-for="item in picArr">
@@ -107,29 +121,13 @@
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
       </div>
     </el-dialog>
-    <!-- 导出报表界面-->
-    <el-dialog title="导出execel" :visible.sync="showExportExcel" :close-on-click-modal="false" style="text-align: center;">
-      <el-date-picker
-        v-model="rangeDate"
-        prefix-icon="el-icon-date"
-        type="daterange"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        size="small"
-        value-format="yyyy/MM/dd"
-        style="margin: 20px"
-      ></el-date-picker>
-      <el-button type="primary" @click="confirmExportExcel">确认</el-button>
-    </el-dialog>
   </section>
 </template>
 <script>
 
 import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes, showExcelData } from '../../api/api'
-import VueViewer from 'vue-viewerjs'
 import { export2Excel } from '../../utils/util'
-
-
+const VueViewer = () => import('vue-viewerjs')
 export default {
   components: { VueViewer },
   props: {
@@ -191,8 +189,7 @@ export default {
       picArr: [],
       videoArr: [],
       size: 0,
-      showExportExcel: false,
-      rangeDate: [],
+      rangeDate: null,
       excelFormateData: [
         {title: '报修人姓名', key: 'u_name'},
         {title: '报修人工号', key: 'u_jobno'},
@@ -201,7 +198,7 @@ export default {
         {title: '报修时间', key: 's_date'},
         {title: '问题描述', key: 's_msg'}
       ],
-      tableParams: {}
+      username: ''
     }
   },
   methods: {
@@ -225,7 +222,8 @@ export default {
     getServices () {
       let para = {
         page: this.page,
-        name: this.filters.name
+        name: this.username,
+        date: this.rangeDate
       }
       this.listLoading = true
       getServiceListPage(para)
@@ -277,7 +275,7 @@ export default {
         })
     },
     // 显示详情界面
-    handleEdit: function (index, row) {
+    handleEdit (index, row) {
       this.repairMsgVisible = true
       this.repairMsg = Object.assign({}, row)
       // console.log(this.repairMsg)
@@ -285,7 +283,7 @@ export default {
 
     },
     // 显示新增界面
-    handleAdd: function () {
+    handleAdd () {
       this.addFormVisible = true
       this.addForm = {
         name: '',
@@ -333,7 +331,7 @@ export default {
       })
     },
     // 新增
-    addSubmit: function () {
+    addSubmit () {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {})
@@ -373,11 +371,11 @@ export default {
         }
       })
     },
-    selsChange: function (sels) {
+    selsChange (sels) {
       this.sels = sels
     },
     // 批量删除
-    batchRemove: function () {
+    batchRemove () {
       let ids = this.sels.map(item => item.s_id)
       this.$confirm('确认删除选中的记录吗？', '提示', {
         type: 'warning'
@@ -445,43 +443,29 @@ export default {
       // console.log(this.videoArr)
     },
     exportExcel () {
-      // console.log(this.repairs)
-      // export2Excel(this.excelFormateData, this.repairs)
-      this.showExportExcel = true
-      this.rangeDate = null
-    },
-    confirmExportExcel () {
-      const beginDate = this.rangeDate[0]
-      const endDate = this.rangeDate[1]
-      showExcelData({ beginDate, endDate })
+      showExcelData({ name: this.username, date: this.rangeDate })
         .then(res => {
           if(200 == res.data.code){
             export2Excel(this.excelFormateData, res.data.msg)
-            this.showExportExcel = false
           }
-
         })
         .catch(err => {
           console.log(err)
         })
-    }
-  },
-  watch: {
-    rangeDate: function (newVal, oldVal) {
-      if (newVal !== null) {
-        this.tableParams.beginDate = newVal[0]
-        this.tableParams.endDate = newVal[1]
-      } else {
-        this.tableParams.beginDate = null
-        this.tableParams.endDate = null
-      }
+    },
+    dateChange(){
+      // console.log(this.rangeDate)
+      this.getServices()
+    },
+    checkServices () {
+      this.username = this.filters.name
+      this.getServices()
     }
   },
   mounted () {
     this.getServices()
   }
 }
-
 </script>
 
 <style>
@@ -492,11 +476,13 @@ export default {
     padding: 20px 20px;
   }
   .detail .msg{
-    font-size: 18px;
+    font-size: 15px;
   }
   .detail .msgTitle{
     text-align: center;
-    color: #797979;
+    font-size: 20px;
+    color: #1d8ce0;
+    font-weight: bolder;
   }
 
   .detail .annex{
@@ -521,6 +507,16 @@ export default {
     margin-bottom: 5px;
     max-height: 100%;
   }
-
+  .userInfo, .repairInfo, .annexInfo{
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-clip: padding-box;
+    margin: 10px;
+    padding: 35px 35px 15px 35px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+  }
 
 </style>

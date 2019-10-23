@@ -22,9 +22,9 @@
       </el-table-column>
       <el-table-column type="index" min-width="100">
       </el-table-column>
-      <el-table-column prop="d_no" label="部门编号" min-width="200" >
+      <el-table-column prop="d_no" label="部门编号" min-width="200" sortable>
       </el-table-column>
-      <el-table-column prop="d_name" label="部门名称" min-width="600" >
+      <el-table-column prop="d_name" label="部门名称" min-width="600" sortable>
       </el-table-column>
       <el-table-column label="操作" min-width="350" v-if="showHidden">
         <template scope="scope">

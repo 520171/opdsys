@@ -15,9 +15,7 @@
     "element-ui": "^2.12.0",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
-    "v-viewer": "^1.4.2",
     "vue": "^2.6.6",
-    "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.1",
     "vue-viewerjs": "^1.0.6",
     "vuex": "^3.0.1",
@@ -30,6 +28,9 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "axios-mock-adapter": "^1.16.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "compression-webpack-plugin": "^3.0.0",
+    "cross-env": "^6.0.3",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "lint-staged": "^8.1.4",
@@ -38,7 +39,8 @@
     "sass-loader": "^7.1.0",
     "script-loader": "^0.7.2",
     "vue-cli-plugin-element": "^1.0.1",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "webpack-bundle-analyzer": "^3.6.0"
   },
   "eslintConfig": {
     "root": true,

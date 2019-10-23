@@ -22,17 +22,17 @@
       </el-table-column>
       <el-table-column type="index" min-width="100">
       </el-table-column>
-      <el-table-column prop="u_name" label="姓名" min-width="150" >
+      <el-table-column prop="u_name" label="姓名" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="u_userid" label="userid" min-width="150" >
+      <el-table-column prop="u_userid" label="userid" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="u_gender" label="性别" min-width="150" :formatter="formatSex" >
+      <el-table-column prop="u_gender" label="性别" min-width="150" :formatter="formatSex" sortable>
       </el-table-column>
-      <el-table-column prop="u_jobno" label="工号" min-width="150" >
+      <el-table-column prop="u_jobno" label="工号" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="d_name" label="部门" min-width="150" >
+      <el-table-column prop="d_name" label="部门" min-width="150" sortable>
       </el-table-column>
-      <el-table-column prop="u_flag" label="员工类别" min-width="150" :formatter="formatU_falg">
+      <el-table-column prop="u_flag" label="员工类别" min-width="150" :formatter="formatU_falg" sortable>
       </el-table-column>
       <el-table-column label="QRCode" min-width="150">
         <template scope="scope">
@@ -139,8 +139,8 @@
 <script>
 
 import { getUserListPage, removeUsers, editUser, addUser, showQRCode } from '../../api/api'
-import VueViewer from 'vue-viewerjs'
-const convert = require('chinese2pinyin')
+const VueViewer = () => import('vue-viewerjs')
+const convert = () => import('chinese2pinyin')
 
 export default {
   components: { VueViewer },

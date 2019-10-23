@@ -2,8 +2,7 @@
   <cpn :show-hidden="false"></cpn>
 </template>
 <script>
-import cpn from './DepartmentManager'
-
+const cpn = () => import('./DepartmentManager')
 export default {
   components: {
     cpn

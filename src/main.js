@@ -1,55 +1,35 @@
 import Vue from 'vue'
 import App from './App'
-import ElementUI from 'element-ui'
+import ELEMENT from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './routes'
 import 'font-awesome/css/font-awesome.min.css'
 import store from './vuex/store'
 import './assets/icon/iconfont.css'
-import Viewer from 'v-viewer'
-import {requestAutoLogin} from './api/api'
-import VueCookies from 'vue-cookies'
 
-Vue.use(Viewer)
-// import Router from 'vue-router'
-// import Vuex from 'vuex'
+Vue.use(ELEMENT)
 
-// import Mock from './mock'
-// Mock.bootstrap()
-Vue.use(ElementUI)
-// Vue.use(Vuex)
-
-Vue.use(VueCookies)
-
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    next()
-  } else if (to.path === '/404'){
+router.beforeEach(function (to, from, next) {
+  if ('/login' === to.path) {
     next()
   } else {
-    if(sessionStorage.getItem('user')){
+    if (localStorage.getItem('Authorization')) {
+      // console.log(localStorage.getItem('Authorization'))
       next()
-    }else{
-      requestAutoLogin()
-        .then(msg => {
-          if(200 == msg.code){
-            sessionStorage.setItem('user', JSON.stringify(msg))
-            next()
-          } else {
-            next({ path: '/login' })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          next({ path: '/login' })
-        })
+    } else {
+      next('/login')
     }
   }
 })
+
+router.beforeEach((to, from, next) => {
+  const i = to.matched.length === 1 ? 0 : 1
+  document.title = to.matched[i].meta.title
+  next()
+})
+
 const v = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
-
-console.log(v.$router.options.routes)

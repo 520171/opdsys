@@ -3,8 +3,7 @@
 </template>
 
 <script>
-import cpn from './UserManager'
-
+const cpn = () => import('./UserManager')
 export default {
   components: {
     cpn
