@@ -5,8 +5,8 @@ import router from '../routes'
 axios.defaults.withCredentials = true; //每次请求，无论是否跨域，都带上cookie信息
 const instance = axios.create({})
 
-instance.defaults.baseURL='https://www.opdgr.cn'
-// instance.defaults.baseURL='api'
+// instance.defaults.baseURL='https://www.opdgr.cn'
+instance.defaults.baseURL='api'
 
 instance.interceptors.request.use(config => {
   config.headers.authorization  = localStorage.getItem('Authorization')

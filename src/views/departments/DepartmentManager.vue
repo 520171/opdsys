@@ -4,7 +4,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="部门名称"></el-input>
+          <el-input v-model="filters.name" placeholder="部门名称" prefix-icon="el-icon-search"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="getDepartments">查询</el-button>
@@ -20,7 +20,7 @@
               style="width: 100%;">
       <el-table-column type="selection" min-width="60" v-if="showHidden">
       </el-table-column>
-      <el-table-column type="index" min-width="100">
+      <el-table-column type="index" min-width="100" :index="(page-1)*20+1">
       </el-table-column>
       <el-table-column prop="d_no" label="部门编号" min-width="200" sortable>
       </el-table-column>

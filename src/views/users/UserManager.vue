@@ -4,7 +4,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="姓名"></el-input>
+          <el-input v-model="filters.name" placeholder="姓名" prefix-icon="el-icon-search"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" v-on:click="getUsers">查询</el-button>
@@ -20,7 +20,7 @@
               style="width: 100%;">
       <el-table-column type="selection" min-width="60" v-if="showHidden" >
       </el-table-column>
-      <el-table-column type="index" min-width="100">
+      <el-table-column type="index" min-width="100" :index="(page-1)*20+1">
       </el-table-column>
       <el-table-column prop="u_name" label="姓名" min-width="150" sortable>
       </el-table-column>
@@ -128,10 +128,11 @@
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="QRCodeTitle" :visible.sync="QRCodeVisible" :close-on-click-modal="false" >
-      <VueViewer :images="imgSrc" style="text-align: center">
-        <img :src="imgSrc" />
-      </VueViewer>
+    <el-dialog :title="QRCodeTitle" :visible.sync="QRCodeVisible" :close-on-click-modal="false" style="text-align: center" >
+      <el-image
+        :src="imgSrc"
+        :preview-src-list="[imgSrc]">
+      </el-image>
     </el-dialog>
   </section>
 </template>
@@ -139,11 +140,9 @@
 <script>
 
 import { getUserListPage, removeUsers, editUser, addUser, showQRCode } from '../../api/api'
-const VueViewer = () => import('vue-viewerjs')
-const convert = () => import('chinese2pinyin')
+import convert from 'chinese2pinyin'
 
 export default {
-  components: { VueViewer },
   props: {
     showHidden: {
       default: true,

@@ -1,5 +1,6 @@
 const key = 'opd'
-const crypto = () => import('crypto')
+// const crypto = () => import('crypto')
+import crypto from 'crypto'
 const aesEncrypt = data => {
   // createCipher函数接收两个参数
   // 第一个参数为 加密方式

@@ -4,7 +4,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="报修人姓名"></el-input>
+          <el-input v-model="filters.name" placeholder="报修人姓名" prefix-icon="el-icon-search"></el-input>
         </el-form-item>
         <el-form-item>
           <el-date-picker
@@ -34,7 +34,7 @@
               style="width: 100%;">
       <el-table-column type="selection" min-width="60" v-if="showHidden">
       </el-table-column>
-      <el-table-column type="index" min-width="100">
+      <el-table-column type="index" min-width="100" :index="(page-1)*20+1">
       </el-table-column>
       <el-table-column prop="u_name" label="报修人姓名" min-width="150" sortable>
       </el-table-column>
@@ -82,16 +82,18 @@
         <br>
         <div v-if="showAnnex" class="annexInfo">
           <div class='msgTitle'>附件信息</div>
-          <vue-viewer :images="picArr">
-            <div class="annex">
-              <div class="box" :key="item" v-for="item in picArr">
-                <img :src="item" class="content" />
-              </div>
-              <div :key="item" v-for="item in videoArr" class="box">
-                <video class="content" :src="item" style="max-width: 100%; max-height: 100%;" controls="controls"/>
-              </div>
+          <div class="annex">
+            <div :key="item" v-for="item in picArr" class="box">
+              <el-image
+                :src="item"
+                :preview-src-list="[item]"
+                class="content">
+              </el-image>
             </div>
-          </vue-viewer>
+            <div :key="item" v-for="item in videoArr" class="box">
+              <video class="content" :src="item" style="max-width: 100%; max-height: 100%;" controls="controls"/>
+            </div>
+          </div>
         </div>
       </div>
     </el-dialog>
@@ -127,9 +129,7 @@
 
 import { getServiceListPage, removeRepairs, editUser, addUser, getAnnexes, showExcelData } from '../../api/api'
 import { export2Excel } from '../../utils/util'
-const VueViewer = () => import('vue-viewerjs')
 export default {
-  components: { VueViewer },
   props: {
     showHidden: {
       default: true,

@@ -78,6 +78,7 @@ export default new Router({
       name: '统计',
       iconCls: 'fa fa-bar-chart',
       redirect: '/echarts',
+      meta: { title: 'opd-欧佩德' } ,
       children: [
         { path: '/echarts', component: echarts, name: '数据分析', meta: { title: '数据分析' } }
       ]
@@ -86,7 +87,8 @@ export default new Router({
       path: '/404',
       component: err404,
       name: '',
-      hidden: true
+      hidden: true,
+      meta: { title: '404' } ,
     },
     {
       path: '*',

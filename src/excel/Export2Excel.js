@@ -1,7 +1,9 @@
 /* eslint-disable */
-require('file-saver');
-require('./Blob');
-require('xlsx/dist/xlsx.core.min');
+require('file-saver')
+require('./Blob')
+require('xlsx')
+// require('xlsx/dist/xlsx.core.min');
+
 function generateArray(table) {
     var out = [];
     var rows = table.querySelectorAll('tr');
