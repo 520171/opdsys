@@ -148,7 +148,7 @@ export default {
           this.departments = res.data.departments
           this.listLoading = false
           const departments = Object.assign(this.$store.state.departments, res.data.departments)
-          this.$store.commit('storeDepartments', departments)
+          // this.$store.commit('storeDepartments', departments)
         })
         .catch(err => {
           console.log(err)
