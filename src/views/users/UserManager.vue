@@ -239,14 +239,15 @@ export default {
           this.total = res.data.total
           this.users = res.data.users
           this.listLoading = false
-          const departments = Object.assign(this.$store.state.departments, res.data.departments)
-          this.$store.commit('storeDepartments', departments)
+          let dep = this.$store.state.departments || {}
+          const departments = Object.assign(dep, res.data.departments)
         })
         .catch(err => {
           console.log(err)
           this.listLoading = false
         })
     },
+
     // 删除
     handleDel (index, row) {
       this.$confirm('确认删除该员工吗?', '提示', {

@@ -8,7 +8,8 @@ Vue.use(Vuex)
 // 应用初始状态
 const state = {
   Authorization: localStorage.getItem('Authorization') || '',
-  user: localStorage.getItem('user') || ''
+  user: localStorage.getItem('user') || '',
+  departments: {}
 }
 
 // 定义所需的 mutations
@@ -20,6 +21,9 @@ const mutations = {
   setUser (state, payload) {
     state.user = payload.user
     localStorage.setItem('user', payload.user)
+  },
+  storeDepartments (state, payload) {
+    state.departments = payload.departments
   }
 }
 
